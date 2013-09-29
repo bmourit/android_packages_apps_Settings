@@ -642,9 +642,6 @@
     <string name="wifi_setting_frequency_band_title" msgid="3655327399028584656">"Wi-Fi-frekwensieband"</string>
     <string name="wifi_setting_frequency_band_summary" msgid="3250740757118009784">"Spesifiseer die frekwensieomvang van die bewerking"</string>
     <string name="wifi_setting_frequency_band_error" msgid="837281974489794378">"Kon nie die frekwensiebandwydte instel nie."</string>
-    <string name="wifi_setting_countrycode_title">Wi-Fi gebiedskode?</string>
-    <string name="wifi_setting_countrycode_summary">Spesifiseer die gebieds kode vir Wi-Fi</string>
-    <string name="wifi_setting_countrycode_error">Daar was a probleem on the gebiedskode te verander.</string>
     <string name="wifi_advanced_mac_address_title" msgid="6571335466330978393">"MAC-adres"</string>
     <string name="wifi_advanced_ip_address_title" msgid="6215297094363164846">"IP-adres"</string>
     <string name="wifi_advanced_settings_label" msgid="3654366894867838338">"IP-instellings"</string>
@@ -1401,8 +1398,8 @@
     <string name="power_phone" msgid="5392641106474567277">"Stemoproepe"</string>
     <string name="power_idle" product="tablet" msgid="4612478572401640759">"Tablet ledig"</string>
     <string name="power_idle" product="default" msgid="9055659695602194990">"Foon ledig"</string>
-    <string name="usage_type_cpu" msgid="715162150698338714">"SVE-totaal"</string>
-    <string name="usage_type_cpu_foreground" msgid="6500579611933211831">"SVE-voorgrond"</string>
+    <string name="usage_type_cpu" msgid="715162150698338714">"CPU-totaal"</string>
+    <string name="usage_type_cpu_foreground" msgid="6500579611933211831">"CPU-voorgrond"</string>
     <string name="usage_type_wake_lock" msgid="5125438890233677880">"Hou wakker"</string>
     <string name="usage_type_gps" msgid="7989688715128160790">"GPS"</string>
     <string name="usage_type_wifi_running" msgid="3134357198266380400">"Wi-Fi aan"</string>
@@ -1686,8 +1683,8 @@
     <string name="enable_opengl_traces_title" msgid="6790444011053219871">"Aktiveer OpenGL-spore"</string>
     <string name="debug_layout" msgid="5981361776594526155">"Wys uitleg se grense"</string>
     <string name="debug_layout_summary" msgid="2001775315258637682">"Wys snitgrense, kantlyne, ens."</string>
-    <string name="show_cpu_usage" msgid="2389212910758076024">"Wys SVE-verbruik"</string>
-    <string name="show_cpu_usage_summary" msgid="2113341923988958266">"Skermlaag wys huidige SVE-gebruik"</string>
+    <string name="show_cpu_usage" msgid="2389212910758076024">"Wys CPU-verbruik"</string>
+    <string name="show_cpu_usage_summary" msgid="2113341923988958266">"Skermlaag wys huidige CPU-gebruik"</string>
     <string name="force_hw_ui" msgid="6426383462520888732">"Forseer GPU-lewering"</string>
     <string name="force_hw_ui_summary" msgid="5535991166074861515">"Dwing gebruik van GPU vir 2D-tekening"</string>
     <string name="force_msaa" msgid="7920323238677284387">"Dwing 4x MSAA"</string>

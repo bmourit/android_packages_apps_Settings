@@ -1066,7 +1066,6 @@ public class AccessibilitySettings extends SettingsPreferenceFragment implements
             onInstallActionBarToggleSwitch();
             onProcessArguments(getArguments());
             // Set a transparent drawable to prevent use of the default one.
-            getListView().setCacheColorHint(0);
             getListView().setSelector(new ColorDrawable(Color.TRANSPARENT));
             getListView().setDivider(null);
         }

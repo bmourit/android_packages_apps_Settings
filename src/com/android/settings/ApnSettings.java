@@ -164,7 +164,7 @@ public class ApnSettings extends SettingsPreferenceFragment implements
                 Telephony.Carriers.DEFAULT_SORT_ORDER);
 
         if (cursor != null) {
-            PreferenceGroup apnList = (PreferenceGroup) findPreference("apn_list");
+            PreferenceGroup apnList = (PreferenceGroup) getPreferenceScreen().findPreference("apn_list");
             apnList.removeAll();
 
             ArrayList<Preference> mmsApnList = new ArrayList<Preference>();

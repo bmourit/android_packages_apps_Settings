@@ -1,17 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2007 The Android Open Source Project
-
-     Licensed under the Apache License, Version 2.0 (the "License");
-     you may not use this file except in compliance with the License.
-     You may obtain a copy of the License at
-
-          http://www.apache.org/licenses/LICENSE-2.0
-
-     Unless required by applicable law or agreed to in writing, software
-     distributed under the License is distributed on an "AS IS" BASIS,
-     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-     See the License for the specific language governing permissions and
-     limitations under the License.
+<!--
+/*
+** Copyright 2007 The Android Open Source Project
+**
+** Licensed under the Apache License, Version 2.0 (the "License");
+** you may not use this file except in compliance with the License.
+** You may obtain a copy of the License at
+**
+**     http://www.apache.org/licenses/LICENSE-2.0
+**
+** Unless required by applicable law or agreed to in writing, software
+** distributed under the License is distributed on an "AS IS" BASIS,
+** WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+** See the License for the specific language governing permissions and
+** limitations under the License.
+*/
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Strings for Dialog yes button -->
@@ -357,6 +360,15 @@
     <!-- Bluetooth phone book permission Alert Activity checkbox text [CHAR LIMIT=none] -->
     <string name="bluetooth_pb_remember_choice">Don\'t ask again</string>
 
+    <!-- Activity label of BluetoothMasPermissionActivity, also used as Strings in the permission dialog [CHAR LIMIT=none] -->
+    <string name="bluetooth_mas_request">"Message Access request"</string>
+
+    <!-- Bluetooth MAS permission Alert Activity text [CHAR LIMIT=none] -->
+    <string name="bluetooth_mas_acceptance_dialog_text">%1$s would like to access your messages. Give access to %2$s?</string>
+
+    <!-- Bluetooth MAS permission Alert Activity checkbox text [CHAR LIMIT=none] -->
+    <string name="bluetooth_mas_remember_choice">Don\'t ask again</string>
+
     <!-- Date & time settings screen title -->
     <string name="date_and_time">Date &amp; time settings</string>
     <!-- The title of the activity to pick a time zone. -->
@@ -687,6 +699,8 @@
     <string name="location_settings_title">Location access</string>
     <!-- Main Settings screen setting option title for the item to take you to the security screen -->
     <string name="security_settings_title">Security</string>
+    <!-- App Ops -->
+    <string name="appops_settings_title">App privacy</string>
     <!-- Main Settings screen setting option summary text for the item tot ake you to the security and location screen -->
     <string name="security_settings_summary">Set My Location, screen unlock, SIM card lock, credential storage lock</string>
     <!-- Main Settings screen setting option summary text for the item to take you to the CDMA security and location screen -->
@@ -1482,6 +1496,15 @@
     <string name="wifi_scan_always_confirm_allow">Allow</string>
     <string name="wifi_scan_always_confirm_deny">Deny</string>
 
+    <!-- Ad-Hoc (IBSS) -->
+    <string name="wifi_mode">Mode</string>
+    <string name="wifi_mode_ibss">Ad-Hoc (IBSS) Network</string>
+    <string name="wifi_mode_ibss_short">Ad-Hoc</string>
+
+    <string name="wifi_ibss_freq_title">Channel / Frequency</string>
+    <string name="wifi_channel">Channel</string>
+    <string name="wifi_mhz">MHz</string>
+
     <!-- Button label to connect to a Wi-Fi network -->
     <string name="wifi_connect">Connect</string>
     <!-- Failured notification for connect -->
@@ -1523,6 +1546,10 @@
     <string name="wifi_setting_frequency_band_summary">Specify the frequency range of operation</string>
     <!-- Wi-Fi settings screen, error message when the frequency band could not be set [CHAR LIMIT=50]. -->
     <string name="wifi_setting_frequency_band_error">There was a problem setting the frequency band.</string>
+    <!-- Wi-Fi settings screen, advanced, title of the item to set the Wi-Fi priority. -->
+    <string name="wifi_setting_priority_title">Wi-Fi priority</string>
+    <!-- Wi-Fi settings screen, setting summary for setting the Wi-Fi priority-->
+    <string name="wifi_setting_priority_summary">Specify the priority of the Wi-Fi networks</string>
     <!-- Wi-Fi settings screen, advanced, title of the item to show the Wi-Fi device's MAC address. -->
     <string name="wifi_advanced_mac_address_title">MAC address</string>
     <!-- Title of the screen to adjust IP settings -->
@@ -1713,6 +1740,8 @@
     <string name="vibrate_in_silent_title">Vibrate when silent</string>
     <!-- Sound settings screen, setting option name -->
     <string name="notification_sound_title">Default notification sound</string>
+    <!-- Sound settings screen, notification light repeat pulsing title -->
+    <string name="notification_pulse_title">Pulse notification light</string>
     <!-- Sound settings screen, the title of the volume bar to adjust the incoming call volume -->
     <string name="incoming_call_volume_title">Ringtone</string>
     <!-- Sound settings screen, the title of the volume bar to adjust the notification volume -->
@@ -1738,6 +1767,9 @@
     <string name="lock_sounds_enable_title">Screen lock sound</string>
     <!-- Sound settings screen, setting check box label -->
     <string name="haptic_feedback_enable_title">Vibrate on touch</string>
+    <!-- Sound settings screen, setting check box label -->
+    <string name="camera_sounds_title">Camera shutter sound</string>
+    <string name="camera_sounds_summary">WARNING: Disabling the camera shutter sound is illegal in some areas!</string>
     <!-- Sound settings screen, setting option name checkbox to enable/disable audio recording features that improve audio recording in noisy environments -->
     <string name="audio_record_proc_title">Noise cancellation</string>
     <!-- Volume description for media volume -->
@@ -2106,6 +2138,9 @@
     <!-- Storage setting.  Summary for PTP checkbox [CHAR LIMIT=NONE]-->
     <string name="usb_label_installer_cd">"Install file-transfer tools"</string>
 
+    <string name="storage_rescan_media">Rescan media for the storage volume</string>
+    <string name="storage_rescan_media_complete">Scan completed</string>
+
     <!-- Section header above list of other users storage [CHAR LIMIT=32] -->
     <string name="storage_other_users">Other users</string>
 
@@ -2337,7 +2372,7 @@
     <string name="manage_mobile_plan_title" translatable="true">Manage mobile plan</string>
 
     <!-- The SIM operator is not known [CHAR_ LIMIT=50]-->
-    <string name="mobile_unknown_sim_operator" translatable="true">Uknown SIM operator</string>
+    <string name="mobile_unknown_sim_operator" translatable="true">Unknown SIM operator</string>
 
     <!-- There is no mobile provisiong website for the operator which is the firat parameter [CHAR_ LIMIT=50]-->
     <string name="mobile_no_provisioning_url" translatable="true">%1$s has no known provisioning website</string>
@@ -2489,6 +2524,10 @@
     <string name="lockpattern_settings_enable_summary">Must draw pattern to unlock screen</string>
     <!-- Security & location settings screen, setting check box title. This setting controls whether a visible green line is drawn as the user moves his finger around while drawing the unlock pattern.  If checked, this line is drawn.  If unchecked, there is nothing drawn so the user does not reveal his pattern while he unlocks the phone.-->
     <string name="lockpattern_settings_enable_visible_pattern_title">Make pattern visible</string>
+    <!-- Security & location settings screen, setting check box title. This setting controls whether a visible red line will be drawn after the user has drawn the unlock pattern incorrectly.  If checked, this line is drawn.  If unchecked, there is nothing drawn so the user does not reveal his pattern while he unlocks the phone.-->
+    <string name="lockpattern_settings_enable_error_path_title">Show pattern error</string>
+    <!-- Security & location settings screen, setting check box title. This setting controls whether the dots will be drawn when using the lockscreen pattern.-->
+    <string name="lockpattern_settings_enable_dots_title">Show pattern dots</string>
     <!-- Security & location settings screen, setting check box title. This setting controls whether tactile feedback will be produced when the user draws the pattern.-->
     <string name="lockpattern_settings_enable_tactile_feedback_title">Vibrate on touch</string>
     <!-- Security & location settings screen, setting check box title. This controls whether the device locks immediately when the power button is pressed. [CHAR LIMIT=28]-->
@@ -2622,7 +2661,6 @@
         <li>Disabled app notifications</li>\n
         <li>Default applications for actions</li>\n
         <li>Background data restrictions for apps</li>\n
-        <li>Privacy guard</li>\n\n
         <li>Any permission restrictions</li>\n\n
         You will not lose any app data.</string>
     <!-- [CHAR LIMIT=25] Manage applications screen, menu item.  Confirmation button of dialog to confirm resetting user's app preferences. -->
@@ -3113,6 +3151,15 @@
     <!-- Message of dialog confirming that user wants to protect external storage. [CHAR LIMIT=NONE] -->
     <string name="enforce_read_external_confirm_message" product="default">When SD card is protected, apps must request permission to read data from external storage.\n\nSome apps may not work until updated by their developers.</string>
 
+    <!-- Setting checkbox title for root access -->
+    <string name="root_access">Root access</string>
+    <string name="root_access_warning_title">Allow root access?</string>
+    <string name="root_access_warning_message">Allowing applications to request root access is very dangerous and could compromise the security of your system!</string>
+    <string name="root_access_none">Disabled</string>
+    <string name="root_access_apps">Apps only</string>
+    <string name="root_access_adb">ADB only</string>
+    <string name="root_access_all">Apps and ADB</string>
+
     <!-- Title for the screen that lets the user choose a gadget to add to the home screen
          (or other screens that can host gadgets).  Note to translators: we're still determining
          the final name for Gadgets/Widgets, so please translate both for now. -->
@@ -3193,6 +3240,8 @@
         screen magnification on app transitions</string>
     <!-- Title for the accessibility preference to power button to end a call. [CHAR LIMIT=35] -->
     <string name="accessibility_power_button_ends_call_prerefence_title">Power button ends call</string>
+    <!-- Title for the accessibility preference to home button to answers a call. [CHAR LIMIT=35] -->
+    <string name="accessibility_home_button_answers_call_prerefence_title">Home button answers call</string>
     <!-- Title for the accessibility preference to speak passwords. [CHAR LIMIT=35] -->
     <string name="accessibility_toggle_speak_password_preference_title">Speak passwords</string>
     <!-- Title for accessibility preference to choose long-press delay i.e. timeout before it is detected. [CHAR LIMIT=35] -->
@@ -4443,40 +4492,43 @@
 
     <!-- Label for are-notifications-enabled checkbox in app details [CHAR LIMIT=20] -->
     <string name="app_notifications_switch_label">Show notifications</string>
+    <!-- Label for are-notifications-enabled checkbox in app details [CHAR LIMIT=20] -->
+    <string name="app_halo_label_black">Blacklist HALO notifications</string>
+    <string name="app_halo_label_white">Whitelist HALO notifications</string>
 
     <!--  Help URLs for some screens. Not specified here. Specified in product overlays --><skip/>
     <!-- Help menu label [CHAR LIMIT=20] -->
     <string name="help_label">Help</string>
     <!-- Help URL, WiFi [DO NOT TRANSLATE] -->
-    <string name="help_url_wifi" translatable="false"></string>
+    <string name="help_url_wifi" translatable="false">http://support.google.com/mobile/?p=settings_wifi</string>
     <!-- Help URL, Bluetooth [DO NOT TRANSLATE] -->
-    <string name="help_url_bluetooth" translatable="false"></string>
+    <string name="help_url_bluetooth" translatable="false">http://support.google.com/mobile/?p=settings_bluetooth</string>
     <!-- Help URL, Data usage [DO NOT TRANSLATE] -->
-    <string name="help_url_data_usage" translatable="false"></string>
+    <string name="help_url_data_usage" translatable="false">http://support.google.com/mobile/?p=settings_data</string>
     <!-- Help URL, More [DO NOT TRANSLATE] -->
-    <string name="help_url_more_networks" translatable="false"></string>
+    <string name="help_url_more_networks" translatable="false">http://support.google.com/mobile/?p=settings_wireless</string>
     <!-- Help URL, Vpn [DO NOT TRANSLATE] -->
-    <string name="help_url_vpn" translatable="false"></string>
+    <string name="help_url_vpn" translatable="false">http://support.google.com/mobile/?p=settings_vpn</string>
     <!-- Help URL, Sound [DO NOT TRANSLATE] -->
-    <string name="help_url_sound" translatable="false"></string>
+    <string name="help_url_sound" translatable="false">http://support.google.com/mobile/?p=settings_sound</string>
     <!-- Help URL, Battery [DO NOT TRANSLATE] -->
-    <string name="help_url_battery" translatable="false"></string>
+    <string name="help_url_battery" translatable="false">http://support.google.com/mobile/?p=settings_battery</string>
     <!-- Help URL, Accounts [DO NOT TRANSLATE] -->
-    <string name="help_url_accounts" translatable="false"></string>
+    <string name="help_url_accounts" translatable="false">http://support.google.com/mobile/?p=settings_accounts</string>
     <!-- Help URL, Choose lockscreen [DO NOT TRANSLATE] -->
-    <string name="help_url_choose_lockscreen" translatable="false"></string>
+    <string name="help_url_choose_lockscreen" translatable="false">http://support.google.com/mobile/?p=settings_screenlock</string>
     <!-- Help URL, Backup & reset [DO NOT TRANSLATE] -->
-    <string name="help_url_backup_reset" translatable="false"></string>
+    <string name="help_url_backup_reset" translatable="false">http://support.google.com/mobile/?p=settings_backup</string>
     <!-- Help URL, Tethering [DO NOT TRANSLATE] -->
-    <string name="help_url_tether" translatable="false"></string>
+    <string name="help_url_tether" translatable="false">http://support.google.com/mobile/?p=settings_tether</string>
     <!-- Help URL, Dreams [DO NOT TRANSLATE] -->
-    <string name="help_url_dreams" translatable="false"></string>
+    <string name="help_url_dreams" translatable="false">http://support.google.com/mobile/?p=settings_dreams</string>
     <!-- Help URL, User settings [DO NOT TRANSLATE] -->
-    <string name="help_url_users" translatable="false"></string>
+    <string name="help_url_users" translatable="false">http://support.google.com/mobile/?p=settings_users</string>
     <!-- Help URL, Location access [DO NOT TRANSLATE] -->
-    <string name="help_url_location_access" translatable="false"></string>
+    <string name="help_url_location_access" translatable="false">http://support.google.com/mobile/?p=settings_location</string>
     <!-- Help URL, Security settings [DO NOT TRANSLATE] -->
-    <string name="help_url_security" translatable="false"></string>
+    <string name="help_url_security" translatable="false">http://support.google.com/mobile/?p=settings_security</string>
 
     <!-- User account title [CHAR LIMIT=30] -->
     <string name="user_account_title">Account for content</string>
@@ -4487,7 +4539,6 @@
     <string name="cell_broadcast_settings">Cell broadcasts</string>
     <!-- Cell Broadcast settings description [CHAR LIMIT=100] -->
     <string name="cell_broadcast_settings_summary">Select the types of emergency alerts to display.</string>
-
     <!-- User app limits screen title [CHAR LIMIT=35] -->
     <string name="user_restrictions_title">Application and content restrictions</string>
     <!-- User limits screen, user name rename text [CHAR LIMIT=15] -->
@@ -4534,4 +4585,5 @@
 
     <!-- Text to display in regulatory info screen (from device overlay). -->
     <string name="regulatory_info_text"></string>
+
 </resources>

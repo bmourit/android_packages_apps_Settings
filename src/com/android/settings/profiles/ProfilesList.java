@@ -41,8 +41,11 @@ public class ProfilesList extends SettingsPreferenceFragment implements
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        addPreferencesFromResource(R.xml.profiles_settings);
-        mProfileManager = (ProfileManager) getActivity().getSystemService(PROFILE_SERVICE);
+        if (getPreferenceManager() != null) {
+            addPreferencesFromResource(R.xml.profiles_settings);
+            mProfileManager = (ProfileManager) getActivity().getSystemService(PROFILE_SERVICE);
+
+        }
     }
 
     @Override

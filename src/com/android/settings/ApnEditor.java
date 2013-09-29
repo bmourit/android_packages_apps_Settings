@@ -60,9 +60,9 @@ public class ApnEditor extends SettingsPreferenceFragment
     private final static String KEY_ROAMING_PROTOCOL = "apn_roaming_protocol";
     private final static String KEY_CARRIER_ENABLED = "carrier_enabled";
     private final static String KEY_BEARER = "bearer";
+    private final static String KEY_MVNO_TYPE = "mvno_type";
     protected static final String EDIT_ACTION = "edit_action";
     protected static final String EDIT_DATA = "edit_data";
-    private final static String KEY_MVNO_TYPE = "mvno_type";
 
     private static final int MENU_DELETE = Menu.FIRST;
     private static final int MENU_SAVE = Menu.FIRST + 1;

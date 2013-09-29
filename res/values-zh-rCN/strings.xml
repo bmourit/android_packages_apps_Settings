@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Copyright (C) 2007 The Android Open Source Project
+<!--  Copyright (C) 2007 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -518,7 +518,7 @@
     <string name="wifi_display_disconnect_title" msgid="1543715924639003599">"是否断开连接？"</string>
     <string name="wifi_display_disconnect_text" msgid="4824860802264489088">"此操作将会断开您与以下设备的连接：&lt;br&gt;&lt;b&gt;<xliff:g id="DEVICE_NAME">%1$s</xliff:g>&lt;/b&gt;"</string>
     <string name="wifi_display_options_title" msgid="5740656401635054838">"无线显示选项"</string>
-    <string name="wifi_display_options_forget" msgid="9119048225398894580">"忘记"</string>
+    <string name="wifi_display_options_forget" msgid="9119048225398894580">"取消保存"</string>
     <string name="wifi_display_options_done" msgid="5703116500357822557">"完成"</string>
     <string name="wifi_display_options_name" msgid="4756080222307467898">"名称"</string>
     <string name="wifi_display_summary_on" msgid="3695429596604962531">"开启"</string>
@@ -570,7 +570,7 @@
     <string name="wifi_menu_scan" msgid="1470911530412095868">"扫描"</string>
     <string name="wifi_menu_advanced" msgid="7522252991919573664">"高级"</string>
     <string name="wifi_menu_connect" msgid="4996220309848349408">"连接到网络"</string>
-    <string name="wifi_menu_forget" msgid="8736964302477327114">"忘记此网络"</string>
+    <string name="wifi_menu_forget" msgid="8736964302477327114">"取消保存网络"</string>
     <string name="wifi_menu_modify" msgid="2068554918652440105">"修改网络"</string>
     <string name="wifi_empty_list_wifi_off" msgid="8056223875951079463">"要查看可用网络，请打开 WLAN。"</string>
     <string name="wifi_empty_list_wifi_on" msgid="8746108031587976356">"正在搜索 WLAN 网络…"</string>
@@ -625,8 +625,8 @@
     <string name="wifi_scan_always_confirm_deny" msgid="4463982053823520710">"拒绝"</string>
     <string name="wifi_connect" msgid="1076622875777072845">"连接"</string>
     <string name="wifi_failed_connect_message" msgid="8491902558970292871">"无法连接网络"</string>
-    <string name="wifi_forget" msgid="8168174695608386644">"忘记"</string>
-    <string name="wifi_failed_forget_message" msgid="1348172929201654986">"无法忘记网络"</string>
+    <string name="wifi_forget" msgid="8168174695608386644">"取消保存"</string>
+    <string name="wifi_failed_forget_message" msgid="1348172929201654986">"无法取消保存网络"</string>
     <string name="wifi_save" msgid="3331121567988522826">"保存"</string>
     <string name="wifi_failed_save_message" msgid="6650004874143815692">"无法保存网络"</string>
     <string name="wifi_cancel" msgid="6763568902542968964">"取消"</string>
@@ -688,6 +688,7 @@
     <string name="ring_volume_title" msgid="7938706566797464165">"铃声音量"</string>
     <string name="vibrate_in_silent_title" msgid="3897968069156767036">"静音时振动"</string>
     <string name="notification_sound_title" msgid="5137483249425507572">"默认通知提示音"</string>
+    <string name="notification_pulse_title" msgid="1247988024534030629">"收到通知时指示灯闪烁"</string>
     <string name="incoming_call_volume_title" msgid="8073714801365904099">"铃声"</string>
     <string name="notification_volume_title" msgid="2012640760341080408">"通知"</string>
     <string name="checkbox_notification_same_as_incoming_call" msgid="1073644356290338921">"将来电音量用作通知音量"</string>
@@ -1104,7 +1105,7 @@
     <string name="show_background_processes" msgid="2009840211972293429">"显示缓存进程"</string>
     <string name="reset_app_preferences" msgid="1321050641018356925">"重置应用偏好设置"</string>
     <string name="reset_app_preferences_title" msgid="6093179367325336662">"要重置应用偏好设置吗？"</string>
-    <string name="reset_app_preferences_desc" msgid="4822447731869201512">"这将重置以下所有偏好设置：\n\n "<li>"停用的应用"</li>\n" "<li>"停用的应用通知"</li>\n" "<li>"执行操作的默认应用"</li>\n" "<li>"应用的后台数据限制"</li>\n" "<li>"隐私卫士"</li>\n" "<li>"任何权限限制"</li>\n\n" 您将不会丢失任何应用数据。"</string>
+    <string name="reset_app_preferences_desc" msgid="4822447731869201512">"这将重置以下所有偏好设置：\n\n "<li>"停用的应用"</li>\n" "<li>"停用的应用通知"</li>\n" "<li>"执行操作的默认应用"</li>\n" "<li>"应用的后台数据限制"</li>\n" "<li>"任何权限限制"</li>\n\n" 您将不会丢失任何应用数据。"</string>
     <string name="reset_app_preferences_button" msgid="2559089511841281242">"重置应用"</string>
     <string name="manage_space_text" msgid="8852711522447794676">"管理空间"</string>
     <string name="filter" msgid="2018011724373033887">"过滤"</string>
@@ -1579,7 +1580,7 @@
     <string name="wifi_setup_back" msgid="144777383739164044">"上一步"</string>
     <string name="wifi_setup_detail" msgid="2336990478140503605">"网络详情"</string>
     <string name="wifi_setup_connect" msgid="7954456989590237049">"连接"</string>
-    <string name="wifi_setup_forget" msgid="2562847595567347526">"忘记"</string>
+    <string name="wifi_setup_forget" msgid="2562847595567347526">"取消保存"</string>
     <string name="wifi_setup_save" msgid="3659235094218508211">"保存"</string>
     <string name="wifi_setup_cancel" msgid="3185216020264410239">"取消"</string>
     <string name="wifi_setup_status_scanning" msgid="5317003416385428036">"正在扫描查找网络..."</string>

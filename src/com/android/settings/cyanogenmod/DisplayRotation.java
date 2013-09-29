@@ -90,13 +90,9 @@ public class DisplayRotation extends SettingsPreferenceFragment implements OnPre
 
         mSwapVolumeButtons = (CheckBoxPreference) prefSet.findPreference(KEY_SWAP_VOLUME_BUTTONS);
         if (mSwapVolumeButtons != null) {
-            if (!Utils.hasVolumeRocker(getActivity())) {
-                prefSet.removePreference(mSwapVolumeButtons);
-            } else {
-                int swapVolumeKeys = Settings.System.getInt(getContentResolver(),
-                        Settings.System.SWAP_VOLUME_KEYS_ON_ROTATION, 0);
-                mSwapVolumeButtons.setChecked(swapVolumeKeys > 0);
-            }
+            int swapVolumeKeys = Settings.System.getInt(getContentResolver(),
+                    Settings.System.SWAP_VOLUME_KEYS_ON_ROTATION, 0);
+            mSwapVolumeButtons.setChecked(swapVolumeKeys > 0);
         }
 
         if (hasRotationLock) {
@@ -159,13 +155,16 @@ public class DisplayRotation extends SettingsPreferenceFragment implements OnPre
                 mode |= ROTATION_0_MODE;
                 mRotation0Pref.setChecked(true);
             }
-            Settings.System.putInt(getActivity().getContentResolver(),
+            Settings.System.putInt(getActivity().getApplicationContext().getContentResolver(),
                     Settings.System.ACCELEROMETER_ROTATION_ANGLES, mode);
             return true;
         } else if (preference == mSwapVolumeButtons) {
-            int value = mSwapVolumeButtons.isChecked() ? (Utils.isTablet(getActivity()) ? 2 : 1) : 0;
-            Settings.System.putInt(getActivity().getContentResolver(),
-                    Settings.System.SWAP_VOLUME_KEYS_ON_ROTATION, value);
+            Context context = getActivity().getApplicationContext();
+            Settings.System.putInt(context.getContentResolver(),
+                    Settings.System.SWAP_VOLUME_KEYS_ON_ROTATION,
+                    mSwapVolumeButtons.isChecked()
+                    ? (Utils.isTablet(context) ? 2 : 1)
+                    : 0);
         }
 
         return super.onPreferenceTreeClick(preferenceScreen, preference);

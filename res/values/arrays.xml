@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /*
-**
 ** Copyright 2007 The Android Open Source Project
 **
 ** Licensed under the Apache License, Version 2.0 (the "License");
@@ -194,6 +193,7 @@
         <item>High</item>
         <item>Very high</item>
     </string-array>
+
     <!-- Do not translate. -->
     <string-array name="tts_pitch_values">
         <item>50</item>
@@ -218,7 +218,6 @@
         <item>ita</item>
         <item>spa</item>
     </string-array>
-
 
     <!-- Wi-Fi settings -->
 
@@ -586,10 +585,7 @@
 
     <!-- Names of categories of app ops tabs -->
     <string-array name="app_ops_categories">
-        <item>Location</item>
-        <item>Personal</item>
-        <item>Messaging</item>
-        <item>Device</item>
+        <item>Operations</item>
     </string-array>
 
     <!-- User display names for app ops codes -->
@@ -703,7 +699,9 @@
     <!-- Titles for window animation scale preference. [CHAR LIMIT=35] -->
     <string-array name="window_animation_scale_entries">
         <item>Animation off</item>
+        <item>Animation scale .25x</item>
         <item>Animation scale .5x</item>
+        <item>Animation scale .75x</item>
         <item>Animation scale 1x</item>
         <item>Animation scale 1.5x</item>
         <item>Animation scale 2x</item>
@@ -714,7 +712,9 @@
     <!-- Values for window animation scale preference. -->
     <string-array name="window_animation_scale_values" translatable="false" >
         <item>0</item>
+        <item>.25</item>
         <item>.5</item>
+        <item>.75</item>
         <item>1</item>
         <item>1.5</item>
         <item>2</item>
@@ -725,7 +725,9 @@
     <!-- Titles for transition animation scale preference. [CHAR LIMIT=35] -->
     <string-array name="transition_animation_scale_entries">
         <item>Animation off</item>
+        <item>Animation scale .25x</item>
         <item>Animation scale .5x</item>
+        <item>Animation scale .75x</item>
         <item>Animation scale 1x</item>
         <item>Animation scale 1.5x</item>
         <item>Animation scale 2x</item>
@@ -736,7 +738,9 @@
     <!-- Values for transition animation scale preference. -->
     <string-array name="transition_animation_scale_values" translatable="false" >
         <item>0</item>
+        <item>.25</item>
         <item>.5</item>
+        <item>.75</item>
         <item>1</item>
         <item>1.5</item>
         <item>2</item>
@@ -747,7 +751,9 @@
     <!-- Titles for animator duration scale preference. [CHAR LIMIT=35] -->
     <string-array name="animator_duration_scale_entries">
         <item>Animation off</item>
+        <item>Animation scale .25x</item>
         <item>Animation scale .5x</item>
+        <item>Animation scale .75x</item>
         <item>Animation scale 1x</item>
         <item>Animation scale 1.5x</item>
         <item>Animation scale 2x</item>
@@ -758,7 +764,9 @@
     <!-- Values for animator duration scale preference. -->
     <string-array name="animator_duration_scale_values" translatable="false" >
         <item>0</item>
+        <item>.25</item>
         <item>.5</item>
+        <item>.75</item>
         <item>1</item>
         <item>1.5</item>
         <item>2</item>
@@ -916,4 +924,5 @@
         <!-- Always allow app to send to premium SMS short code. -->
         <item>Always allow</item>
     </string-array>
+
 </resources>

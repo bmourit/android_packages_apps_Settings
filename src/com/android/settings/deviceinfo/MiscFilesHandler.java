@@ -148,7 +148,7 @@ public class MiscFilesHandler extends ListActivity {
                     final IMediaContainerService imcs = IMediaContainerService.Stub.asInterface(
                             service);
                     try {
-                        imcs.deleteFile(mPath); // Works for file and directory   
+                        imcs.deleteFile(mPath); // Works for file and directory
                     } catch (Exception e) {
                         Log.w(TAG, "Problem in container service", e);
                     }

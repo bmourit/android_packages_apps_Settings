@@ -122,8 +122,8 @@ public class UsbSettings extends SettingsPreferenceFragment {
             mUms.setChecked(false);
         } else if (UsbManager.USB_FUNCTION_PTP.equals(function)) {
             mMtp.setChecked(false);
-            mUms.setChecked(false);
             mPtp.setChecked(true);
+            mUms.setChecked(false);
         } else if (UsbManager.USB_FUNCTION_MASS_STORAGE.equals(function)) {
             mMtp.setChecked(false);
             mPtp.setChecked(false);
@@ -171,7 +171,7 @@ public class UsbSettings extends SettingsPreferenceFragment {
         } else if (preference == mPtp && mPtp.isChecked()) {
             function = UsbManager.USB_FUNCTION_PTP;
         } else if (preference == mUms && mUms.isChecked()) {
-            function = UsbManager.USB_FUNCTION_MASS_STORAGE;
+	            function = UsbManager.USB_FUNCTION_MASS_STORAGE;
         }
 
         mUsbManager.setCurrentFunction(function, true);

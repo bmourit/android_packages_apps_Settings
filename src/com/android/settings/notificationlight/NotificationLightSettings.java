@@ -90,12 +90,14 @@ public class NotificationLightSettings extends SettingsPreferenceFragment implem
     private int mDefaultLedOn;
     private int mDefaultLedOff;
     private PackageManager mPackageManager;
+    private boolean mCustomEnabled;
+    private boolean mLightEnabled;
+    private boolean mVoiceCapable;
     private PreferenceGroup mApplicationPrefList;
-    private CheckBoxPreference mEnabledPref;
-    private CheckBoxPreference mCustomEnabledPref;
     private ApplicationLightPreference mDefaultPref;
     private ApplicationLightPreference mCallPref;
     private ApplicationLightPreference mVoicemailPref;
+    private CheckBoxPreference mCustomEnabledPref;
     private Menu mMenu;
     private PackageAdapter mPackageAdapter;
     private String mPackageList;
@@ -114,36 +116,15 @@ public class NotificationLightSettings extends SettingsPreferenceFragment implem
         mDefaultLedOff = resources.getInteger(
                 com.android.internal.R.integer.config_defaultNotificationLedOff);
 
-        mEnabledPref = (CheckBoxPreference)
-                findPreference(Settings.System.NOTIFICATION_LIGHT_PULSE);
-        mEnabledPref.setOnPreferenceChangeListener(this);
-        mCustomEnabledPref = (CheckBoxPreference)
-                findPreference(Settings.System.NOTIFICATION_LIGHT_PULSE_CUSTOM_ENABLE);
-        mCustomEnabledPref.setOnPreferenceChangeListener(this);
-
-        mDefaultPref = (ApplicationLightPreference) findPreference(DEFAULT_PREF);
-        mDefaultPref.setOnPreferenceChangeListener(this);
-
-        // Missed call and Voicemail preferences should only show on devices with a voice capabilities
-        TelephonyManager tm = (TelephonyManager) getActivity().getSystemService(Context.TELEPHONY_SERVICE);
-        if (tm.getPhoneType() == TelephonyManager.PHONE_TYPE_NONE) {
-            removePreference("phone_list");
-        } else {
-            mCallPref = (ApplicationLightPreference) findPreference(MISSED_CALL_PREF);
-            mCallPref.setOnPreferenceChangeListener(this);
-
-            mVoicemailPref = (ApplicationLightPreference) findPreference(VOICEMAIL_PREF);
-            mVoicemailPref.setOnPreferenceChangeListener(this);
-        }
-
-        mApplicationPrefList = (PreferenceGroup) findPreference("applications_list");
-        mApplicationPrefList.setOrderingAsAdded(false);
-
         // Get launch-able applications
         mPackageManager = getPackageManager();
         mPackageAdapter = new PackageAdapter();
 
         mPackages = new HashMap<String, Package>();
+
+        // Determine if the device has voice capabilities
+        TelephonyManager tm = (TelephonyManager) getActivity().getSystemService(Context.TELEPHONY_SERVICE);
+        mVoiceCapable = tm.getPhoneType() != TelephonyManager.PHONE_TYPE_NONE;
 
         setHasOptionsMenu(true);
     }
@@ -153,45 +134,69 @@ public class NotificationLightSettings extends SettingsPreferenceFragment implem
         super.onResume();
         refreshDefault();
         refreshCustomApplicationPrefs();
+        setCustomEnabled();
         getListView().setOnItemLongClickListener(this);
-        getActivity().invalidateOptionsMenu();
     }
 
     private void refreshDefault() {
         ContentResolver resolver = getContentResolver();
-        int color = Settings.System.getInt(resolver,
-                NOTIFICATION_LIGHT_PULSE_DEFAULT_COLOR, mDefaultColor);
-        int timeOn = Settings.System.getInt(resolver,
-                NOTIFICATION_LIGHT_PULSE_DEFAULT_LED_ON, mDefaultLedOn);
-        int timeOff = Settings.System.getInt(resolver,
-                NOTIFICATION_LIGHT_PULSE_DEFAULT_LED_OFF, mDefaultLedOff);
-
-        mDefaultPref.setAllValues(color, timeOn, timeOff);
+        int color = Settings.System.getInt(resolver, NOTIFICATION_LIGHT_PULSE_DEFAULT_COLOR, mDefaultColor);
+        int timeOn = Settings.System.getInt(resolver, NOTIFICATION_LIGHT_PULSE_DEFAULT_LED_ON, mDefaultLedOn);
+        int timeOff = Settings.System.getInt(resolver, NOTIFICATION_LIGHT_PULSE_DEFAULT_LED_OFF, mDefaultLedOff);
+        mLightEnabled = Settings.System.getInt(resolver, NOTIFICATION_LIGHT_PULSE, 0) == 1;
+        mCustomEnabled = Settings.System.getInt(resolver, NOTIFICATION_LIGHT_PULSE_CUSTOM_ENABLE, 0) == 1;
 
         // Get Missed call and Voicemail values
-        if (mCallPref != null) {
-            int callColor = Settings.System.getInt(resolver,
-                    NOTIFICATION_LIGHT_PULSE_CALL_COLOR, mDefaultColor);
-            int callTimeOn = Settings.System.getInt(resolver,
-                    NOTIFICATION_LIGHT_PULSE_CALL_LED_ON, mDefaultLedOn);
-            int callTimeOff = Settings.System.getInt(resolver,
-                    NOTIFICATION_LIGHT_PULSE_CALL_LED_OFF, mDefaultLedOff);
+        int callColor = Settings.System.getInt(resolver, NOTIFICATION_LIGHT_PULSE_CALL_COLOR, mDefaultColor);
+        int callTimeOn = Settings.System.getInt(resolver, NOTIFICATION_LIGHT_PULSE_CALL_LED_ON, mDefaultLedOn);
+        int callTimeOff = Settings.System.getInt(resolver, NOTIFICATION_LIGHT_PULSE_CALL_LED_OFF, mDefaultLedOff);
+        int vmailColor = Settings.System.getInt(resolver, NOTIFICATION_LIGHT_PULSE_VMAIL_COLOR, mDefaultColor);
+        int vmailTimeOn = Settings.System.getInt(resolver, NOTIFICATION_LIGHT_PULSE_VMAIL_LED_ON, mDefaultLedOn);
+        int vmailTimeOff = Settings.System.getInt(resolver, NOTIFICATION_LIGHT_PULSE_VMAIL_LED_OFF, mDefaultLedOff);
 
-            mCallPref.setAllValues(callColor, callTimeOn, callTimeOff);
+        PreferenceScreen prefSet = getPreferenceScreen();
+        PreferenceGroup generalPrefs = (PreferenceGroup) prefSet.findPreference("general_section");
+        if (generalPrefs != null) {
+
+            // Pulse preference
+            CheckBoxPreference cPref = (CheckBoxPreference) prefSet.findPreference(PULSE_PREF);
+            cPref.setChecked(mLightEnabled);
+            cPref.setOnPreferenceChangeListener(this);
+
+            // Default preference
+            mDefaultPref = (ApplicationLightPreference) prefSet.findPreference(DEFAULT_PREF);
+            mDefaultPref.setAllValues(color, timeOn, timeOff);
+            mDefaultPref.setEnabled(mLightEnabled);
+            mDefaultPref.setOnPreferenceChangeListener(this);
+
+            // Custom enabled preference
+            mCustomEnabledPref = (CheckBoxPreference) prefSet.findPreference(CUSTOM_PREF);
+            mCustomEnabledPref.setChecked(mCustomEnabled);
+            mCustomEnabledPref.setEnabled(mLightEnabled);
+            mCustomEnabledPref.setOnPreferenceChangeListener(this);
         }
 
-        if (mVoicemailPref != null) {
-            int vmailColor = Settings.System.getInt(resolver,
-                    NOTIFICATION_LIGHT_PULSE_VMAIL_COLOR, mDefaultColor);
-            int vmailTimeOn = Settings.System.getInt(resolver,
-                    NOTIFICATION_LIGHT_PULSE_VMAIL_LED_ON, mDefaultLedOn);
-            int vmailTimeOff = Settings.System.getInt(resolver,
-                    NOTIFICATION_LIGHT_PULSE_VMAIL_LED_OFF, mDefaultLedOff);
+        PreferenceGroup phonePrefs = (PreferenceGroup) prefSet.findPreference("phone_list");
+        if (phonePrefs != null) {
 
-            mVoicemailPref.setAllValues(vmailColor, vmailTimeOn, vmailTimeOff);
+            // Missed call and Voicemail preferences
+            // Should only show on devices with a voice capabilities
+            if (!mVoiceCapable) {
+                prefSet.removePreference(phonePrefs);
+            } else {
+                mCallPref = (ApplicationLightPreference) prefSet.findPreference(MISSED_CALL_PREF);
+                mCallPref.setAllValues(callColor, callTimeOn, callTimeOff);
+                mCallPref.setEnabled(mCustomEnabled);
+                mCallPref.setOnPreferenceChangeListener(this);
+
+                mVoicemailPref = (ApplicationLightPreference) prefSet.findPreference(VOICEMAIL_PREF);
+                mVoicemailPref.setAllValues(vmailColor, vmailTimeOn, vmailTimeOff);
+                mVoicemailPref.setEnabled(mCustomEnabled);
+                mVoicemailPref.setOnPreferenceChangeListener(this);
+            }
         }
 
-        mApplicationPrefList = (PreferenceGroup) findPreference("applications_list");
+        mApplicationPrefList = (PreferenceGroup) prefSet.findPreference("applications_list");
         mApplicationPrefList.setOrderingAsAdded(false);
     }
 
@@ -224,6 +229,22 @@ public class NotificationLightSettings extends SettingsPreferenceFragment implem
                     // Do nothing
                 }
             }
+        }
+    }
+
+    private void setCustomEnabled() {
+        boolean enabled = mCustomEnabled && mLightEnabled;
+
+        // Phone related preferences
+        if (mVoiceCapable) {
+            mCallPref.setEnabled(enabled);
+            mVoicemailPref.setEnabled(enabled);
+        }
+
+        // Custom applications
+        if (mApplicationPrefList != null) {
+            mApplicationPrefList.setEnabled(enabled);
+            setHasOptionsMenu(enabled);
         }
     }
 
@@ -349,12 +370,23 @@ public class NotificationLightSettings extends SettingsPreferenceFragment implem
     }
 
     public boolean onPreferenceChange(Preference preference, Object objValue) {
-        if (preference == mEnabledPref || preference == mCustomEnabledPref) {
-            getActivity().invalidateOptionsMenu();
+        String key = preference.getKey();
+
+        if (PULSE_PREF.equals(key)) {
+            mLightEnabled = (Boolean) objValue;
+            Settings.System.putInt(getContentResolver(), Settings.System.NOTIFICATION_LIGHT_PULSE,
+                    mLightEnabled ? 1 : 0);
+            mDefaultPref.setEnabled(mLightEnabled);
+            mCustomEnabledPref.setEnabled(mLightEnabled);
+            setCustomEnabled();
+        } else if (CUSTOM_PREF.equals(key)) {
+            mCustomEnabled = (Boolean) objValue;
+            Settings.System.putInt(getContentResolver(), NOTIFICATION_LIGHT_PULSE_CUSTOM_ENABLE,
+                    mCustomEnabled ? 1 : 0);
+            setCustomEnabled();
         } else {
-            ApplicationLightPreference lightPref = (ApplicationLightPreference) preference;
-            updateValues(lightPref.getKey(), lightPref.getColor(),
-                    lightPref.getOnValue(), lightPref.getOffValue());
+            ApplicationLightPreference tPref = (ApplicationLightPreference) preference;
+            updateValues(key, tPref.getColor(), tPref.getOnValue(), tPref.getOffValue());
         }
 
         return true;
@@ -366,12 +398,6 @@ public class NotificationLightSettings extends SettingsPreferenceFragment implem
         mMenu.add(0, MENU_ADD, 0, R.string.profiles_add)
                 .setIcon(R.drawable.ic_menu_add)
                 .setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS | MenuItem.SHOW_AS_ACTION_WITH_TEXT);
-    }
-
-    @Override
-    public void onPrepareOptionsMenu(Menu menu) {
-        boolean enableAddButton = mEnabledPref.isChecked() && mCustomEnabledPref.isChecked();
-        menu.findItem(MENU_ADD).setVisible(enableAddButton);
     }
 
     @Override

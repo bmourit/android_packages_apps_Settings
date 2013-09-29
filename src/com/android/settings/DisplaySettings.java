@@ -48,7 +48,8 @@ import android.util.Log;
 
 import com.android.internal.view.RotationPolicy;
 import com.android.settings.cyanogenmod.DisplayRotation;
-import com.android.settings.Utils;
+import com.android.settings.DreamSettings;
+import com.android.settings.R;
 
 import org.cyanogenmod.hardware.AdaptiveBacklight;
 
@@ -68,7 +69,12 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
     private static final String KEY_DISPLAY_ROTATION = "display_rotation";
     private static final String KEY_LOCKSCREEN_ROTATION = "lockscreen_rotation";
     private static final String KEY_ADAPTIVE_BACKLIGHT = "adaptive_backlight";
+    private static final String KEY_POWER_CRT_MODE = "system_power_crt_mode";
+    private static final String KEY_POWER_CRT_SCREEN_OFF = "system_power_crt_screen_off";
     private static final String KEY_WAKE_WHEN_PLUGGED_OR_UNPLUGGED = "wake_when_plugged_or_unplugged";
+    private static final String KEY_WAKEUP_CATEGORY = "category_wakeup_options";
+    private static final String KEY_BUTTON_WAKE = "pref_wakeon_button";
+    private static final String KEY_VOLUME_WAKE = "pref_volume_wake";
 
     private static final String CATEGORY_LIGHTS = "lights_prefs";
     private static final String KEY_NOTIFICATION_PULSE = "notification_pulse";
@@ -84,9 +90,14 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
 
     private DisplayManager mDisplayManager;
 
-    private CheckBoxPreference mWakeWhenPluggedOrUnplugged;
-    private PreferenceScreen mDisplayRotationPreference;
+    private CheckBoxPreference mAccelerometer;
     private FontDialogPreference mFontSizePref;
+    private CheckBoxPreference mVolumeWake;
+    private PreferenceScreen mDisplayRotationPreference;
+    private ListPreference mCrtMode;
+    private ListPreference mButtonWake;
+    private CheckBoxPreference mCrtOff;
+    private CheckBoxPreference mWakeWhenPluggedOrUnplugged;
 
     private final Configuration mCurConfig = new Configuration();
 
@@ -96,10 +107,14 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
     private WifiDisplayStatus mWifiDisplayStatus;
     private Preference mWifiDisplayPreference;
 
-    private CheckBoxPreference mAdaptiveBacklight;
+    private boolean mIsCrtOffChecked = false;
 
     private PreferenceScreen mNotificationPulse;
     private PreferenceScreen mBatteryPulse;
+
+    private CheckBoxPreference mAdaptiveBacklight;
+
+    private boolean electronBeamFadesConfig;
 
     private ContentObserver mAccelerometerRotationObserver =
             new ContentObserver(new Handler()) {
@@ -121,26 +136,50 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ContentResolver resolver = getActivity().getContentResolver();
-        Resources res = getResources();
 
         addPreferencesFromResource(R.xml.display_settings);
 
+        PreferenceScreen prefSet = getPreferenceScreen();
+        Resources res = getResources();
+
         mDisplayRotationPreference = (PreferenceScreen) findPreference(KEY_DISPLAY_ROTATION);
 
-        final CheckBoxPreference lockScreenRotation =
-                (CheckBoxPreference) findPreference(KEY_LOCKSCREEN_ROTATION);
-        if (lockScreenRotation != null) {
-            if (!res.getBoolean(com.android.internal.R.bool.config_enableLockScreenRotation)) {
-                getPreferenceScreen().removePreference(lockScreenRotation);
-            }
+        mScreenSaverPreference = findPreference(KEY_SCREEN_SAVER);
+        if (mScreenSaverPreference != null
+                && getResources().getBoolean(
+                        com.android.internal.R.bool.config_dreamsSupported) == false) {
+            getPreferenceScreen().removePreference(mScreenSaverPreference);
         }
 
-        mScreenSaverPreference = findPreference(KEY_SCREEN_SAVER);
-        if (mScreenSaverPreference != null) {
-            if (!res.getBoolean(com.android.internal.R.bool.config_dreamsSupported)) {
-                getPreferenceScreen().removePreference(mScreenSaverPreference);
-            }
-        }
+        // respect device default configuration
+        // true fades while false animates
+        electronBeamFadesConfig = getResources().getBoolean(
+                com.android.internal.R.bool.config_animateScreenLights);
+
+        // use this to enable/disable crt on feature
+        mIsCrtOffChecked = Settings.System.getInt(getActivity().getContentResolver(),
+                Settings.System.SYSTEM_POWER_ENABLE_CRT_OFF,
+                electronBeamFadesConfig ? 0 : 1) == 1;
+
+        mCrtOff = (CheckBoxPreference) findPreference(KEY_POWER_CRT_SCREEN_OFF);
+        mCrtOff.setChecked(mIsCrtOffChecked);
+
+        mCrtMode = (ListPreference) prefSet.findPreference(KEY_POWER_CRT_MODE);
+        int crtMode = Settings.System.getInt(getActivity().getContentResolver(),
+                Settings.System.SYSTEM_POWER_CRT_MODE, 0);
+        mCrtMode.setValue(String.valueOf(crtMode));
+        mCrtMode.setSummary(mCrtMode.getEntry());
+        mCrtMode.setOnPreferenceChangeListener(this);
+
+        // Default value for wake-on-plug behavior from config.xml
+        boolean wakeUpWhenPluggedOrUnpluggedConfig = res.getBoolean(
+                com.android.internal.R.bool.config_unplugTurnsOnScreen);
+
+        mWakeWhenPluggedOrUnplugged =
+                (CheckBoxPreference) findPreference(KEY_WAKE_WHEN_PLUGGED_OR_UNPLUGGED);
+        mWakeWhenPluggedOrUnplugged.setChecked(Settings.Global.getInt(resolver,
+                Settings.Global.WAKE_WHEN_PLUGGED_OR_UNPLUGGED,
+                (wakeUpWhenPluggedOrUnpluggedConfig ? 1 : 0)) == 1);
 
         mScreenTimeoutPreference = (ListPreference) findPreference(KEY_SCREEN_TIMEOUT);
         final long currentTimeout = Settings.System.getLong(resolver, SCREEN_OFF_TIMEOUT,
@@ -154,30 +193,6 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
         mFontSizePref = (FontDialogPreference) findPreference(KEY_FONT_SIZE);
         mFontSizePref.setOnPreferenceChangeListener(this);
         mFontSizePref.setOnPreferenceClickListener(this);
-
-        mDisplayManager = (DisplayManager)getActivity().getSystemService(
-                Context.DISPLAY_SERVICE);
-        mWifiDisplayStatus = mDisplayManager.getWifiDisplayStatus();
-        mWifiDisplayPreference = (Preference)findPreference(KEY_WIFI_DISPLAY);
-        if (mWifiDisplayStatus.getFeatureState()
-                == WifiDisplayStatus.FEATURE_STATE_UNAVAILABLE) {
-            getPreferenceScreen().removePreference(mWifiDisplayPreference);
-            mWifiDisplayPreference = null;
-        }
-
-        mAdaptiveBacklight = (CheckBoxPreference) findPreference(KEY_ADAPTIVE_BACKLIGHT);
-        if (!isAdaptiveBacklightSupported()) {
-            getPreferenceScreen().removePreference(mAdaptiveBacklight);
-            mAdaptiveBacklight = null;
-        }
-
-        if (!res.getBoolean(com.android.internal.R.bool.config_screenOffAnimation)) {
-            getPreferenceScreen().removePreference(
-                    findPreference(Settings.System.SCREEN_OFF_ANIMATION));
-        }
-
-        mWakeWhenPluggedOrUnplugged =
-                (CheckBoxPreference) findPreference(KEY_WAKE_WHEN_PLUGGED_OR_UNPLUGGED);
 
         boolean hasNotificationLed = res.getBoolean(
                 com.android.internal.R.bool.config_intrusiveNotificationLed);
@@ -201,6 +216,48 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
             }
         } else {
             getPreferenceScreen().removePreference(lightPrefs);
+        }
+
+        mDisplayManager = (DisplayManager)getActivity().getSystemService(
+                Context.DISPLAY_SERVICE);
+        mWifiDisplayStatus = mDisplayManager.getWifiDisplayStatus();
+        mWifiDisplayPreference = (Preference)findPreference(KEY_WIFI_DISPLAY);
+        if (mWifiDisplayStatus.getFeatureState()
+                == WifiDisplayStatus.FEATURE_STATE_UNAVAILABLE) {
+            getPreferenceScreen().removePreference(mWifiDisplayPreference);
+            mWifiDisplayPreference = null;
+        }
+
+        // Button wake
+        mButtonWake = (ListPreference) findPreference(KEY_BUTTON_WAKE);
+        if (mButtonWake != null) {
+            if (!getResources().getBoolean(R.bool.config_show_homeWake)) {
+                //no home button, don't allow user to disable power button either
+                getPreferenceScreen().removePreference(mButtonWake);
+            } else {
+                int buttonWakeValue = Settings.System.getInt(resolver,
+                        Settings.System.BUTTON_WAKE_SCREEN, 2);
+                mButtonWake.setValue(String.valueOf(buttonWakeValue));
+                mButtonWake.setSummary(getResources().getString(R.string.pref_wakeon_button_summary, mButtonWake.getEntry()));
+                mButtonWake.setOnPreferenceChangeListener(this);
+            }
+        }
+
+        // Volume rocker wake
+        mVolumeWake = (CheckBoxPreference) findPreference(KEY_VOLUME_WAKE);
+        if (mVolumeWake != null) {
+            if (!getResources().getBoolean(R.bool.config_show_volumeRockerWake)) {
+                getPreferenceScreen().removePreference(mVolumeWake);
+            } else {
+                mVolumeWake.setChecked(Settings.System.getInt(resolver,
+                        Settings.System.VOLUME_WAKE_SCREEN, 0) == 1);
+            }
+        }
+
+        mAdaptiveBacklight = (CheckBoxPreference) findPreference(KEY_ADAPTIVE_BACKLIGHT);
+        if (!isAdaptiveBacklightSupported()) {
+            getPreferenceScreen().removePreference(mAdaptiveBacklight);
+            mAdaptiveBacklight = null;
         }
     }
 
@@ -318,10 +375,8 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
         RotationPolicy.registerRotationPolicyListener(getActivity(),
                 mRotationPolicyListener);
 
-        final ContentResolver resolver = getContentResolver();
-
         // Display rotation observer
-        resolver.registerContentObserver(
+        getContentResolver().registerContentObserver(
                 Settings.System.getUriFor(Settings.System.ACCELEROMETER_ROTATION), true,
                 mAccelerometerRotationObserver);
 
@@ -330,14 +385,6 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
                     DisplayManager.ACTION_WIFI_DISPLAY_STATUS_CHANGED));
             mWifiDisplayStatus = mDisplayManager.getWifiDisplayStatus();
         }
-
-        // Default value for wake-on-plug behavior from config.xml
-        boolean wakeUpWhenPluggedOrUnpluggedConfig = getResources().getBoolean(
-                com.android.internal.R.bool.config_unplugTurnsOnScreen);
-
-        mWakeWhenPluggedOrUnplugged.setChecked(Settings.Global.getInt(resolver,
-                Settings.Global.WAKE_WHEN_PLUGGED_OR_UNPLUGGED,
-                (wakeUpWhenPluggedOrUnpluggedConfig ? 1 : 0)) == 1);
 
         if (mAdaptiveBacklight != null) {
             mAdaptiveBacklight.setChecked(AdaptiveBacklight.isEnabled());
@@ -456,10 +503,18 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
 
     @Override
     public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
-         if (preference == mWakeWhenPluggedOrUnplugged) {
+        if (preference == mCrtOff) {
+            Settings.System.putInt(getActivity().getContentResolver(),
+                    Settings.System.SYSTEM_POWER_ENABLE_CRT_OFF,
+                    mCrtOff.isChecked() ? 1 : 0);
+            return true;
+        } else if (preference == mWakeWhenPluggedOrUnplugged) {
             Settings.Global.putInt(getContentResolver(),
                     Settings.Global.WAKE_WHEN_PLUGGED_OR_UNPLUGGED,
                     mWakeWhenPluggedOrUnplugged.isChecked() ? 1 : 0);
+        } else if (preference == mVolumeWake) {
+            Settings.System.putInt(getContentResolver(), Settings.System.VOLUME_WAKE_SCREEN,
+                    mVolumeWake.isChecked() ? 1 : 0);
             return true;
         } else if (preference == mAdaptiveBacklight) {
             return AdaptiveBacklight.setEnabled(mAdaptiveBacklight.isChecked());
@@ -470,8 +525,21 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
 
     @Override
     public boolean onPreferenceChange(Preference preference, Object objValue) {
-        final String key = preference.getKey();
-        if (KEY_SCREEN_TIMEOUT.equals(key)) {
+        if (preference == mCrtMode) {
+            int crtMode = Integer.valueOf((String) objValue);
+            int index = mCrtMode.findIndexOfValue((String) objValue);
+            Settings.System.putInt(getActivity().getContentResolver(),
+                    Settings.System.SYSTEM_POWER_CRT_MODE, crtMode);
+            mCrtMode.setSummary(mCrtMode.getEntries()[index]);
+            return true;
+        } else if (preference == mButtonWake) {
+            int buttonWakeValue = Integer.valueOf((String) objValue);
+            int index = mButtonWake.findIndexOfValue((String) objValue);
+            Settings.System.putInt(getActivity().getContentResolver(),
+                    Settings.System.BUTTON_WAKE_SCREEN, buttonWakeValue);
+            mButtonWake.setSummary(getResources().getString(R.string.pref_wakeon_button_summary, mButtonWake.getEntries()[index]));
+            return true;
+        } else if (preference == mScreenTimeoutPreference) {
             int value = Integer.parseInt((String) objValue);
             try {
                 Settings.System.putInt(getContentResolver(), SCREEN_OFF_TIMEOUT, value);
@@ -479,12 +547,12 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
             } catch (NumberFormatException e) {
                 Log.e(TAG, "could not persist screen timeout setting", e);
             }
-        }
-        if (KEY_FONT_SIZE.equals(key)) {
+            return true;
+        } else if (preference == mFontSizePref) {
             writeFontSizePreference(objValue);
+            return true;
         }
-
-        return true;
+        return false;
     }
 
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {

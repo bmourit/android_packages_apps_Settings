@@ -109,11 +109,13 @@ public class InstalledAppDetails extends Fragment
     private AppWidgetManager mAppWidgetManager;
     private DevicePolicyManager mDpm;
     private ISms mSmsManager;
+    private INotificationManager mNotificationManager;
     private ApplicationsState mState;
     private ApplicationsState.Session mSession;
     private ApplicationsState.AppEntry mAppEntry;
     private boolean mInitialized;
     private boolean mShowUninstalled;
+    private boolean mHaloPolicyIsBlack = true;
     private PackageInfo mPackageInfo;
     private CanBeOnSdCardChecker mCanBeOnSdCardChecker;
     private View mRootView;
@@ -141,7 +143,7 @@ public class InstalledAppDetails extends Fragment
     private Button mForceStopButton;
     private Button mClearDataButton;
     private Button mMoveAppButton;
-    private CompoundButton mNotificationSwitch;
+    private CompoundButton mNotificationSwitch, mHaloState;
     private CompoundButton mPrivacyGuardSwitch;
 
     private PackageMoveObserver mPackageMoveObserver;
@@ -350,16 +352,15 @@ public class InstalledAppDetails extends Fragment
     private void initUninstallButtons() {
         mUpdatedSysApp = (mAppEntry.info.flags & ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) != 0;
         boolean enabled = true;
+        boolean specialDisable = false;
         if (mUpdatedSysApp) {
             mUninstallButton.setText(R.string.app_factory_reset);
-            boolean specialDisable = false;
             if ((mAppEntry.info.flags & ApplicationInfo.FLAG_SYSTEM) != 0) {
+                specialDisable = true;
                 specialDisable = handleDisableable(mSpecialDisableButton);
                 mSpecialDisableButton.setOnClickListener(this);
             }
-            mMoreControlButtons.setVisibility(specialDisable ? View.VISIBLE : View.GONE);
         } else {
-            mMoreControlButtons.setVisibility(View.GONE);
             if ((mAppEntry.info.flags & ApplicationInfo.FLAG_SYSTEM) != 0) {
                 enabled = handleDisableable(mUninstallButton);
             } else if ((mPackageInfo.applicationInfo.flags
@@ -371,8 +372,16 @@ public class InstalledAppDetails extends Fragment
                 enabled = false;
             } else {
                 mUninstallButton.setText(R.string.uninstall_text);
+                // regular app
+                if(enabled = handleDisableable(mSpecialDisableButton)) {
+                    // enabled will be false if its a launcher or signed with system cert, for safety.
+                    specialDisable = true;
+                    mSpecialDisableButton.setOnClickListener(this);
+                }
             }
         }
+        mMoreControlButtons.setVisibility(specialDisable ? View.VISIBLE : View.GONE);
+
         // If this is a device admin, it can't be uninstall or disabled.
         // We do this here so the text of the button is still set correctly.
         if (mDpm.packageHasActiveAdmins(mPackageInfo.packageName)) {
@@ -386,16 +395,17 @@ public class InstalledAppDetails extends Fragment
     }
 
     private void initNotificationButton() {
-        INotificationManager nm = INotificationManager.Stub.asInterface(
-                ServiceManager.getService(Context.NOTIFICATION_SERVICE));
         boolean enabled = true; // default on
+        boolean allowedForHalo = true; // default on
         try {
-            enabled = nm.areNotificationsEnabledForPackage(mAppEntry.info.packageName,
-                    mAppEntry.info.uid);
+            enabled = mNotificationManager.areNotificationsEnabledForPackage(mAppEntry.info.packageName, mAppEntry.info.uid);
+            allowedForHalo = mNotificationManager.isPackageAllowedForHalo(mAppEntry.info.packageName);
         } catch (android.os.RemoteException ex) {
             // this does not bode well
         }
         mNotificationSwitch.setChecked(enabled);
+        mHaloState.setChecked((mHaloPolicyIsBlack ? !allowedForHalo : allowedForHalo));
+        mHaloState.setOnCheckedChangeListener(this);
         if (isThisASystemPackage()) {
             mNotificationSwitch.setEnabled(false);
         } else {
@@ -429,8 +439,16 @@ public class InstalledAppDetails extends Fragment
         mAppWidgetManager = AppWidgetManager.getInstance(getActivity());
         mDpm = (DevicePolicyManager)getActivity().getSystemService(Context.DEVICE_POLICY_SERVICE);
         mSmsManager = ISms.Stub.asInterface(ServiceManager.getService("isms"));
+        mNotificationManager = INotificationManager.Stub.asInterface(
+                ServiceManager.getService(Context.NOTIFICATION_SERVICE));
 
         mCanBeOnSdCardChecker = new CanBeOnSdCardChecker();
+
+        try {
+            mHaloPolicyIsBlack = mNotificationManager.isHaloPolicyBlack();
+        } catch (android.os.RemoteException ex) {
+            // System dead
+        }
 
         // Need to make sure we have loaded applications at this point.
         mSession.resume();
@@ -491,6 +509,8 @@ public class InstalledAppDetails extends Fragment
         mEnableCompatibilityCB = (CheckBox)view.findViewById(R.id.enable_compatibility_cb);
         
         mNotificationSwitch = (CompoundButton) view.findViewById(R.id.notification_switch);
+        mHaloState = (CompoundButton) view.findViewById(R.id.halo_state);
+        mHaloState.setText((mHaloPolicyIsBlack ? R.string.app_halo_label_black : R.string.app_halo_label_white));
 
         mPrivacyGuardSwitch = (CompoundButton) view.findViewById(R.id.privacy_guard_switch);
 
@@ -597,6 +617,12 @@ public class InstalledAppDetails extends Fragment
     public void onPause() {
         super.onPause();
         mSession.pause();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mSession.release();
     }
 
     @Override
@@ -1166,7 +1192,9 @@ public class InstalledAppDetails extends Fragment
                     .setPositiveButton(R.string.dlg_ok,
                         new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
-                            // Disable the app
+                            // Force stop, why keep it around if we're disabling it?
+                            getOwner().forceStopPackage(getOwner().mAppEntry.info.packageName);
+                            // Then disable the app
                             new DisableChanger(getOwner(), getOwner().mAppEntry.info,
                                     PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER)
                             .execute((Object)null);
@@ -1326,12 +1354,9 @@ public class InstalledAppDetails extends Fragment
     }
 
     private void setNotificationsEnabled(boolean enabled) {
-        String packageName = mAppEntry.info.packageName;
-        INotificationManager nm = INotificationManager.Stub.asInterface(
-                ServiceManager.getService(Context.NOTIFICATION_SERVICE));
         try {
             final boolean enable = mNotificationSwitch.isChecked();
-            nm.setNotificationsEnabledForPackage(packageName, mAppEntry.info.uid, enabled);
+            mNotificationManager.setNotificationsEnabledForPackage(mAppEntry.info.packageName, mAppEntry.info.uid, enabled);
         } catch (android.os.RemoteException ex) {
             mNotificationSwitch.setChecked(!enabled); // revert
         }
@@ -1340,6 +1365,14 @@ public class InstalledAppDetails extends Fragment
     private void setPrivacyGuard(boolean enabled) {
         mAppOps.setPrivacyGuardSettingForPackage(
             mAppEntry.info.uid, mAppEntry.info.packageName, enabled);
+    }
+
+    private void setHaloState(boolean state) {
+        try {
+            mNotificationManager.setHaloStatus(mAppEntry.info.packageName, state);
+        } catch (android.os.RemoteException ex) {
+            mHaloState.setChecked(!state); // revert
+        }
     }
 
     private int getPremiumSmsPermission(String packageName) {
@@ -1378,7 +1411,13 @@ public class InstalledAppDetails extends Fragment
                 }
             }
         } else if(v == mSpecialDisableButton) {
-            showDialogInner(DLG_SPECIAL_DISABLE, 0);
+            if((mAppEntry.info.flags & ApplicationInfo.FLAG_INSTALLED) != 0 && mAppEntry.info.enabled) {
+                showDialogInner(DLG_DISABLE, 0);
+            } else {
+                new DisableChanger(this, mAppEntry.info,
+                        PackageManager.COMPONENT_ENABLED_STATE_DEFAULT)
+                .execute((Object)null);
+            }
         } else if(v == mActivitiesButton) {
             mPm.clearPackagePreferredActivities(packageName);
             try {
@@ -1445,6 +1484,8 @@ public class InstalledAppDetails extends Fragment
             } else {
                 setPrivacyGuard(false);
             }
+         } else if (buttonView == mHaloState) {
+            setHaloState(isChecked);
         }
     }
 }

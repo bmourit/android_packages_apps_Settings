@@ -318,7 +318,9 @@
   </string-array>
   <string-array name="window_animation_scale_entries">
     <item msgid="8134156599370824081">"Animazione disattivata"</item>
+    <item>"Scala animazione 0,25x"</item>
     <item msgid="6624864048416710414">"Scala animazione 0,5x"</item>
+    <item>"Scala animazione 0,75x"</item>
     <item msgid="2219332261255416635">"Scala animazione 1x"</item>
     <item msgid="3544428804137048509">"Scala animazione 1,5x"</item>
     <item msgid="3110710404225974514">"Scala animazione 2x"</item>
@@ -327,7 +329,9 @@
   </string-array>
   <string-array name="transition_animation_scale_entries">
     <item msgid="8464255836173039442">"Animazione disattivata"</item>
+    <item>"Scala animazione 0,25x"</item>
     <item msgid="3375781541913316411">"Scala animazione 0,5x"</item>
+    <item>"Scala animazione 0,75x"</item>
     <item msgid="1991041427801869945">"Scala animazione 1x"</item>
     <item msgid="4012689927622382874">"Scala animazione 1,5x"</item>
     <item msgid="3289156759925947169">"Scala animazione 2x"</item>
@@ -336,7 +340,9 @@
   </string-array>
   <string-array name="animator_duration_scale_entries">
     <item msgid="6039901060648228241">"Animazione disattivata"</item>
+    <item>"Scala animazione 0,25x"</item>
     <item msgid="1138649021950863198">"Scala animazione 0,5x"</item>
+    <item>"Scala animazione 0,75x"</item>
     <item msgid="4394388961370833040">"Scala animazione 1x"</item>
     <item msgid="8125427921655194973">"Scala animazione 1,5x"</item>
     <item msgid="3334024790739189573">"Scala animazione 2x"</item>
@@ -396,4 +402,60 @@
     <item msgid="5077768429488260031">"Non consentire mai"</item>
     <item msgid="1417929597727989746">"Consenti sempre"</item>
   </string-array>
+
+    <!-- **** CYANOGENMOD EDITS START **** -->
+
+    <!-- Volume Overlay options. -->
+    <string-array name="volume_overlay_entries">
+    <item>"Singolo"</item>
+        <item>"Espandibile"</item>
+        <item>"Espanso"</item>
+        <item>"Nascosto"</item>
+    </string-array>
+
+    <!-- Performance settings -->
+    <string-array name="pref_zram_size_entries">
+        <item>"Disattivato"</item>
+        <item>"10%"</item>
+        <item>"18% (predefinito)"</item>
+        <item>"26%"</item>
+    </string-array>
+
+    <!-- Profile mode options. -->
+    <string-array name="profile_entries">
+        <item>"Attivato"</item>
+        <item>"Disattivato"</item>
+        <item>"Non sovrascrivere"</item>
+    </string-array>
+
+    <!-- Profile mode options. -->
+    <string-array name="profile_connection_entries">
+        <item>"Disattivato"</item>
+        <item>"Attivato"</item>
+    </string-array>
+
+    <string-array name="entries_network_widget">
+        <item>"2G/3G+2G"</item>
+        <item>"2G/Solo 3G"</item>
+        <item>"2G/Solo 3G/3G+2G"</item>
+    </string-array>
+
+    <string-array name="entries_flash_widget">
+        <item>"Normale"</item>
+        <item>"Elevato"</item>
+    </string-array>
+
+    <string-array name="haptic_feedback_entries">
+        <item>"Usa impostazione globale"</item>
+        <item>"Attivato"</item>
+        <item>"Disattivato"</item>
+    </string-array>
+
+    <string-array name="entries_status_bar_am_pm">
+        <item>"Normale"</item>
+        <item>"Piccolo"</item>
+        <item>"Nessuno (predefinito)"</item>
+    </string-array>
+
+    <!-- **** CYANOGENMOD EDITS END **** -->
 </resources>

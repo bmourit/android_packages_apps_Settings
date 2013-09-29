@@ -1,5 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2007 The Android Open Source Project
+<?xml version="1.0" encoding="UTF-8"?>
+<!--  Copyright (C) 2007 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -1673,7 +1673,7 @@
     <string name="show_screen_updates" msgid="5470814345876056420">"Mostrar atualiz. de sup."</string>
     <string name="show_screen_updates_summary" msgid="2569622766672785529">"Piscar superfícies de toda a janela ao atualizar"</string>
     <string name="show_hw_screen_updates" msgid="5036904558145941590">"Mostrar atualiz. da GPU"</string>
-    <string name="show_hw_screen_updates_summary" msgid="1115593565980196197">"Piscar visualizações em janelas ao renderizar c/ GPU"</string>
+    <string name="show_hw_screen_updates_summary" msgid="1115593565980196197">"Piscar visualizações em janelas ao desenhar c/GPU"</string>
     <string name="show_hw_layers_updates" msgid="5645728765605699821">"Atual. camad. de hardware"</string>
     <string name="show_hw_layers_updates_summary" msgid="5296917233236661465">"Piscar camadas de hardware em verde ao atualizar"</string>
     <string name="show_hw_overdraw" msgid="1136884304711318251">"Mostrar overdraw da CPU"</string>

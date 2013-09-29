@@ -21,26 +21,31 @@
         android:key="additional_options"
         android:title="@string/additional_options_title">
 
-        <com.android.settings.cyanogenmod.SystemSettingCheckBoxPreference
-            android:key="menu_unlock_screen"
-            android:title="@string/unlock_menu_unlock_title"
-            android:summary="@string/unlock_menu_unlock_summary" />
-
-        <com.android.settings.cyanogenmod.SystemSettingCheckBoxPreference
-            android:key="home_unlock_screen"
+        <CheckBoxPreference
+            android:key="home_unlock"
             android:title="@string/unlock_home_unlock_title"
             android:summary="@string/unlock_home_unlock_summary" />
 
-        <com.android.settings.cyanogenmod.SystemSettingCheckBoxPreference
-            android:key="lockscreen_quick_unlock_control"
+        <CheckBoxPreference
+            android:key="menu_unlock"
+            android:title="@string/unlock_menu_unlock_title"
+            android:summary="@string/unlock_menu_unlock_summary" />
+
+        <CheckBoxPreference
+            android:key="quick_unlock_control"
             android:title="@string/unlock_quick_unlock_control_title"
             android:summary="@string/unlock_quick_unlock_control_summary" />
 
-        <com.android.settings.cyanogenmod.SystemSettingCheckBoxPreference
-            android:key="lockscreen.vibrate_enabled"
+        <CheckBoxPreference
+            android:key="lock_before_unlock"
+            android:title="@string/lock_before_unlock_title"
+            android:summary="@string/lock_before_unlock_summary" />
+
+        <CheckBoxPreference
+            android:key="lockscreen_vibrate"
+            android:persistent="false"
             android:title="@string/lockscreen_vibrate_enabled_title"
-            android:summary="@string/lockscreen_vibrate_enabled_head"
-            android:defaultValue="true" />
+            android:summary="@string/lockscreen_vibrate_enabled_head"/>
 
     </PreferenceCategory>
 
