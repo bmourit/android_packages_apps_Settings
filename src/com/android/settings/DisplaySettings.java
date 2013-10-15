@@ -61,6 +61,7 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
 
     // If there is no setting in the provider, use this
     private static final int FALLBACK_SCREEN_TIMEOUT_VALUE = 30000;
+    private static final int SCREEN_TIMEOUT_NEVER  = Integer.MAX_VALUE;
 
     private static final String KEY_SCREEN_TIMEOUT = "screen_timeout";
     private static final String KEY_FONT_SIZE = "font_size";
@@ -144,11 +145,19 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
 
         mDisplayRotationPreference = (PreferenceScreen) findPreference(KEY_DISPLAY_ROTATION);
 
+        final CheckBoxPreference lockScreenRotation =
+                (CheckBoxPreference) findPreference(KEY_LOCKSCREEN_ROTATION);
+        if (lockScreenRotation != null) {
+            if (!res.getBoolean(com.android.internal.R.bool.config_enableLockScreenRotation)) {
+                getPreferenceScreen().removePreference(lockScreenRotation);
+            }
+        }
+
         mScreenSaverPreference = findPreference(KEY_SCREEN_SAVER);
-        if (mScreenSaverPreference != null
-                && getResources().getBoolean(
-                        com.android.internal.R.bool.config_dreamsSupported) == false) {
-            getPreferenceScreen().removePreference(mScreenSaverPreference);
+        if (mScreenSaverPreference != null) {
+            if (!res.getBoolean(com.android.internal.R.bool.config_dreamsSupported)) {
+                getPreferenceScreen().removePreference(mScreenSaverPreference);
+            }
         }
 
         // respect device default configuration
@@ -345,7 +354,7 @@ public class DisplaySettings extends SettingsPreferenceFragment implements
         ArrayList<CharSequence> revisedValues = new ArrayList<CharSequence>();
         for (int i = 0; i < values.length; i++) {
             long timeout = Long.parseLong(values[i].toString());
-            if (timeout <= maxTimeout) {
+            if (timeout <= maxTimeout || timeout == SCREEN_TIMEOUT_NEVER) {
                 revisedEntries.add(entries[i]);
                 revisedValues.add(values[i]);
             }
