@@ -77,6 +77,7 @@ public class StorageVolumePreferenceCategory extends PreferenceCategory
 
     private UsageBarPreference mUsageBarPreference;
     private Preference mMountTogglePreference;
+    private Preference mUhMountTogglePreference;
     private Preference mFormatPreference;
     private Preference mStorageLow;
 
@@ -91,9 +92,8 @@ public class StorageVolumePreferenceCategory extends PreferenceCategory
     private List<StorageItemPreference> mItemUsers = Lists.newArrayList();
 
     private boolean mUsbConnected;
-    private String mUsbFunction;
-    private Preference mUhMountTogglePreference;
     private boolean isUhobj;
+    private String mUsbFunction;
 
     private long mTotalSize;
 
@@ -223,7 +223,6 @@ public class StorageVolumePreferenceCategory extends PreferenceCategory
         }
 
         final boolean isRemovable = mVolume != null ? mVolume.isRemovable() : false;
-
         isUhobj = false;
         if(mVolume != null){
             String mountpoint = mVolume.getPath();
@@ -241,15 +240,6 @@ public class StorageVolumePreferenceCategory extends PreferenceCategory
                 mUhMountTogglePreference.setTitle(R.string.uh_eject);
                 mUhMountTogglePreference.setSummary(R.string.uh_eject_summary);
                 addPreference(mUhMountTogglePreference);
-            }
-
-        // Always create the preference since many code rely on it existing
-        mMountTogglePreference = new Preference(context);
-        if (isRemovable) {
-            mMountTogglePreference.setTitle(R.string.sd_eject);
-            mMountTogglePreference.setSummary(R.string.sd_eject_summary);
-            addPreference(mMountTogglePreference);
-
             }
         }
 
@@ -340,13 +330,6 @@ public class StorageVolumePreferenceCategory extends PreferenceCategory
 	if (mMountTogglePreference == null && mUhMountTogglePreference == null) return;
         //mMountTogglePreference.setEnabled(true);
 
-    //private void updatePreferencesFromState() {
-        // Only update for physical volumes
-        //if (mVolume == null) return;
-
-        //mMountTogglePreference.setEnabled(true);
-
-
         final String state = mStorageManager.getVolumeState(mVolume.getPath());
 
         if (Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)) {
@@ -365,10 +348,10 @@ public class StorageVolumePreferenceCategory extends PreferenceCategory
                 mUhMountTogglePreference.setTitle(mResources.getString(R.string.uh_eject));
                 mUhMountTogglePreference.setSummary(mResources.getString(R.string.uh_eject_summary));
             }else{
-            mMountTogglePreference.setEnabled(true);
-            mMountTogglePreference.setTitle(mResources.getString(R.string.sd_eject));
-            mMountTogglePreference.setSummary(mResources.getString(R.string.sd_eject_summary));
-	    }
+                mMountTogglePreference.setEnabled(true);
+                mMountTogglePreference.setTitle(mResources.getString(R.string.sd_eject));
+                mMountTogglePreference.setSummary(mResources.getString(R.string.sd_eject_summary));
+            }
         } else {
             if (Environment.MEDIA_UNMOUNTED.equals(state) || Environment.MEDIA_NOFS.equals(state)
                     || Environment.MEDIA_UNMOUNTABLE.equals(state)) {
@@ -377,23 +360,21 @@ public class StorageVolumePreferenceCategory extends PreferenceCategory
                     mUhMountTogglePreference.setTitle(mResources.getString(R.string.uh_mount));
                     mUhMountTogglePreference.setSummary(mResources.getString(R.string.uh_mount_summary));
                 }else{
-                mMountTogglePreference.setEnabled(true);
-                mMountTogglePreference.setTitle(mResources.getString(R.string.sd_mount));
-                mMountTogglePreference.setSummary(mResources.getString(R.string.sd_mount_summary));
-	    	}
+                    mMountTogglePreference.setEnabled(true);
+                    mMountTogglePreference.setTitle(mResources.getString(R.string.sd_mount));
+                    mMountTogglePreference.setSummary(mResources.getString(R.string.sd_mount_summary));
+                }
             } else {
                 if(isUhobj){
                     mUhMountTogglePreference.setEnabled(true);
                     mUhMountTogglePreference.setTitle(mResources.getString(R.string.uh_mount));
                     mUhMountTogglePreference.setSummary(mResources.getString(R.string.uh_insert_summary));
-                } else {
-
-                    //mMountTogglePreference.setEnabled(true);
-                    mMountTogglePreference.setEnabled(false);
+                }else{
+                    mMountTogglePreference.setEnabled(true);
                     mMountTogglePreference.setTitle(mResources.getString(R.string.sd_mount));
                     mMountTogglePreference.setSummary(mResources.getString(R.string.sd_insert_summary));
-		}
-	    }
+                }
+            }
 
             removePreference(mUsageBarPreference);
             removePreference(mItemTotal);
@@ -420,7 +401,7 @@ public class StorageVolumePreferenceCategory extends PreferenceCategory
                         mResources.getString(R.string.mtp_ptp_mode_summary));
                 }
             }
-
+            
             if (mFormatPreference != null) {
                 mFormatPreference.setEnabled(false);
                 mFormatPreference.setSummary(mResources.getString(R.string.mtp_ptp_mode_summary));
@@ -552,7 +533,6 @@ public class StorageVolumePreferenceCategory extends PreferenceCategory
 
     public boolean mountToggleClicked(Preference preference) {
         return preference == mMountTogglePreference || preference == mUhMountTogglePreference;
-        //return preference == mMountTogglePreference;
     }
 
     public Intent intentForClick(Preference pref) {

@@ -1720,6 +1720,8 @@
          Label on Wifi Configuration screen-->
     <string name="config_list_label" translatable="false">Configured networks</string>
 
+    <string name="wireless_device_support_info">3G support list</string>
+
     <!-- Sound and alerts settings -->
     <skip/>
     <!-- Main Settings screen setting option name to go into the display settings screen -->
@@ -4586,4 +4588,15 @@
     <!-- Text to display in regulatory info screen (from device overlay). -->
     <string name="regulatory_info_text"></string>
 
+    <!-- usb uhost -->
+    <string name="uh_eject" product="default">Unmount USB Disk</string>
+    <string name="uh_eject_summary" product="default">Unmount the USB Disk so you can safely remove it</string>
+    <string name="uh_insert_summary" product="default">Insert a USB Disk for mounting</string>
+    <string name="uh_mount" product="default">Mount USB Disk</string>
+    <string name="uh_mount_summary" product="default"></string>
+    <string name="uh_dlg_confirm_unmount_title" product="default" >Unmount USB Disk?</string>
+    <string name="uh_dlg_confirm_unmount_text" product="default" >If you unmount the USB Disk, some apps you are using will stop and may be unavailable until you remount the USB Disk.</string>
+    <string name="uh_dlg_error_unmount_title" product="default" ></string>
+    <string name="uh_dlg_error_unmount_text" product="default" >Couldn\'t unmount USB Disk. Try again later.</string>
+    <string name="uh_unmount_inform_text" product="default" >USB Disk will be unmounted.</string>
 </resources>
