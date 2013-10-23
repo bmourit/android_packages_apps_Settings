@@ -22,10 +22,13 @@ import android.os.UserHandle;
 import android.preference.Preference;
 import android.util.AttributeSet;
 
+import com.actions.hardware.PerformanceManager;
 public class BrightnessPreference extends Preference {
+    private PerformanceManager mPerformance;
 
     public BrightnessPreference(Context context, AttributeSet attrs) {
         super(context, attrs);
+        mPerformance = new PerformanceManager();
     }
 
     @Override

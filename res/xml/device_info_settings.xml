@@ -99,6 +99,12 @@
         </PreferenceScreen>
         -->
 
+	<!-- ro.serialno -->
+	<Preference android:key="device_serialno"
+                style="?android:preferenceInformationStyle"
+                android:title="@string/status_serial_number"
+		android:summary="@string/device_info_default"/>
+
         <PreferenceScreen
                 android:key="regulatory_info"
                 android:title="@string/regulatory_information">

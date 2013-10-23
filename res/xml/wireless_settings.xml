@@ -97,4 +97,10 @@
             android:targetClass="com.android.cellbroadcastreceiver.CellBroadcastSettings" />
     </PreferenceScreen>
 
+    <PreferenceScreen
+        android:key="wireless_device_support_info"
+        android:title="@string/wireless_device_support_info" >
+        <intent
+            android:action="android.settings.inetg3" />
+    </PreferenceScreen>
 </PreferenceScreen>

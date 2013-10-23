@@ -63,6 +63,7 @@ public class DeviceInfoSettings extends SettingsPreferenceFragment {
     private static final String KEY_KERNEL_VERSION = "kernel_version";
     private static final String KEY_BUILD_NUMBER = "build_number";
     private static final String KEY_DEVICE_MODEL = "device_model";
+    private static final String KEY_DEVICE_SERIALNO = "device_serialno";
     private static final String KEY_SELINUX_STATUS = "selinux_status";
     private static final String KEY_BASEBAND_VERSION = "baseband_version";
     private static final String KEY_FIRMWARE_VERSION = "firmware_version";
@@ -91,6 +92,7 @@ public class DeviceInfoSettings extends SettingsPreferenceFragment {
         setValueSummary(KEY_BASEBAND_VERSION, "gsm.version.baseband");
         setStringSummary(KEY_DEVICE_MODEL, Build.MODEL + getMsvSuffix());
         setValueSummary(KEY_EQUIPMENT_ID, PROPERTY_EQUIPMENT_ID);
+        setValueSummary(KEY_DEVICE_SERIALNO, "ro.serialno");
         setStringSummary(KEY_DEVICE_MODEL, Build.MODEL);
         setStringSummary(KEY_BUILD_NUMBER, Build.DISPLAY);
         findPreference(KEY_BUILD_NUMBER).setEnabled(true);
@@ -139,6 +141,9 @@ public class DeviceInfoSettings extends SettingsPreferenceFragment {
             getPreferenceScreen().removePreference(findPreference(KEY_BASEBAND_VERSION));
         }
 
+        if (!SystemProperties.get("ro.serialno.display","no").equals("yes")) {
+        	getPreferenceScreen().removePreference(findPreference(KEY_DEVICE_SERIALNO));
+		}
         /*
          * Settings is a generic app and should not contain any device-specific
          * info.
