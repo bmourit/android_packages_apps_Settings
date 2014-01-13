@@ -1726,6 +1726,8 @@
          Label on Wifi Configuration screen-->
     <string name="config_list_label" translatable="false">Configured networks</string>
 
+    <string name="wireless_device_support_info">3G support list</string>
+
     <!-- Sound and alerts settings -->
     <skip/>
     <!-- Main Settings screen setting option name to go into the display settings screen -->
@@ -1882,6 +1884,8 @@
     <string name="screensaver_settings_dream_start">Start now</string>
     <!-- Dream settings screen, button label for settings for a specific screensaver -->
     <string name="screensaver_settings_button">Settings</string>
+    <!-- Screen saver settings, setting option summary to change activation timeout, shown when disabled -->
+    <string name="screensaver_timeout_zero_summary">Never</string>
     <!-- Sound & display settings screen, setting option name to change whether the screen adjusts automatically based on lighting conditions -->
     <string name="automatic_brightness">Automatic brightness</string>
     <!-- [CHAR LIMIT=30] Sound & display settings screen, setting option name to change font size -->
@@ -4863,6 +4867,20 @@
 
     <!-- Cell Broadcast settings title [CHAR LIMIT=50] -->
     <string name="cell_broadcast_settings">Cell broadcasts</string>
+    <!-- Tvout Settings -->  <skip />
+    <!-- Tvout Settings title -->
+    <string name="tvout_settings_title">TVOUT</string>
+    <!-- Cvbs -->
+    <string name="cvbs_mode">CVBS</string>
+    <!-- Hdmi -->
+    <string name="hdmi_mode">HDMI</string>
+    <!-- Tvout screen resize -->
+    <string name="tvout_sreen_resize">Output screen resize</string>
+    
+    <!-- Accelerometer calibration -->
+    <string name="accelerometer_calibration">Accelerometer calibration</string>
+    
+    <string name="enhanced_color_system">Image enhancement system</string>
 
     <!-- User app limits screen title [CHAR LIMIT=35] -->
     <string name="user_restrictions_title">Application and content restrictions</string>
@@ -4910,4 +4928,31 @@
 
     <!-- Text to display in regulatory info screen (from device overlay). -->
     <string name="regulatory_info_text"></string>
+
+    <!-- usb uhost -->
+    <string name="uh_eject" product="default">Unmount USB Disk</string>
+    <string name="uh_eject_summary" product="default">Unmount the USB Disk so you can safely remove it</string>
+    <string name="uh_insert_summary" product="default">Insert a USB Disk for mounting</string>
+    <string name="uh_mount" product="default">Mount USB Disk</string>
+    <string name="uh_mount_summary" product="default"></string>
+    <string name="uh_dlg_confirm_unmount_title" product="default" >Unmount USB Disk?</string>
+    <string name="uh_dlg_confirm_unmount_text" product="default" >If you unmount the USB Disk, some apps you are using will stop and may be unavailable until you remount the USB Disk.</string>
+    <string name="uh_dlg_error_unmount_title" product="default" ></string>
+    <string name="uh_dlg_error_unmount_text" product="default" >Couldn\'t unmount USB Disk. Try again later.</string>
+    <string name="uh_unmount_inform_text" product="default" >USB Disk will be unmounted.</string>
+        
+    <!-- Tvout Settings -->  <skip />
+    <!-- Tvout Settings title -->
+    <string name="tvout_settings_title">TVOUT</string>
+    <!-- Cvbs -->
+    <string name="cvbs_mode">CVBS</string>
+    <!-- Hdmi -->
+    <string name="hdmi_mode">HDMI</string>
+    <!-- Tvout screen resize -->
+    <string name="tvout_sreen_resize">Output screen resize</string>
+    
+    <!-- Accelerometer calibration -->
+    <string name="accelerometer_calibration">Accelerometer calibration</string>
+    
+    <string name="enhanced_color_system">Image enhancement system</string>
 </resources>

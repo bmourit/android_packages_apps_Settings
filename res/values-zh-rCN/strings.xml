@@ -2042,4 +2042,19 @@
     <string name="user_image_take_photo" msgid="1280274310152803669">"拍照"</string>
     <string name="user_image_choose_photo" msgid="7940990613897477057">"从图库中选择照片"</string>
     <string name="regulatory_info_text" msgid="5623087902354026557"></string>
+
+    <!-- usb uhost -->
+    <string name="uh_eject" product="default">"卸载 U 盘"</string>
+    <string name="uh_eject_summary" product="default">"需要先卸载 U 盘，然后才能将其安全移除"</string>
+    <string name="uh_insert_summary" product="default">"插入 U 盘 进行安装"</string>
+    <string name="uh_mount" product="default">"安装 U 盘"</string>
+    <string name="uh_mount_summary" product="default"></string>
+    <string name="uh_dlg_confirm_unmount_title" product="default" >"要卸载 U 盘吗？"</string>
+    <string name="uh_dlg_confirm_unmount_text" product="default" >"如果卸载该 U 盘，您当前使用的某些应用程序会停止，并且在您重新装载该 U 盘前，这些应用程序可能都无法使用。"</string>
+    <string name="uh_dlg_error_unmount_title" product="default" ></string>
+    <string name="uh_dlg_error_unmount_text" product="default" >"无法卸载 U 盘，请稍后重试。"</string>
+    <string name="uh_unmount_inform_text" product="default" >"系统将会卸载 U 盘。"</string>
+    <string name="tvout_sreen_resize">输出画面大小调整</string>
+    <string name="accelerometer_calibration">重力感应校准</string>
+    <string name="enhanced_color_system">画质增强系统</string>
 </resources>
